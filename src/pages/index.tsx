@@ -39,9 +39,18 @@ const Home = () => {
               key={i}
               className={styles.cell}
               onClick={() => {
-                // run if click
-                if (player === 1) {
-                  setBoard(board.splice(i, 1, board[i].splice(k, 1, 1)));
+                if (board[i][k] === 0) {
+                  //copy board
+                  const board_copy = board.slice();
+                  board_copy[i][k] = player;
+
+                  setBoard(board_copy);
+                  // run if click
+                  if (player === 1) {
+                    setPlayer(2);
+                  } else {
+                    setPlayer(1);
+                  }
                 }
               }}
             >
