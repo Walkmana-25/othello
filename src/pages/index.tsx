@@ -1,7 +1,7 @@
 import styles from './index.module.css';
 import { useState } from 'react';
 
-function discColor(num: number): string {
+const discColor = (num: number): string => {
   if (num === 1) {
     return 'white';
   } else if (num === 2) {
@@ -9,7 +9,8 @@ function discColor(num: number): string {
   } else {
     return 'transparent';
   }
-}
+};
+
 function bottomToUp(x: number, y: number, c: number, board: number[][]): [number, number, boolean] {
   board[x][y] = c;
   let canput = true;
