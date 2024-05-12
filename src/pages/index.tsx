@@ -164,15 +164,15 @@ function leftBottomToRightUp(
   c: number,
   board: number[][],
 ): [number, number, boolean] {
-  board[x][y] = c;
+  board[y][x] = c;
   let canput = true;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  let j = y + 1;
+  let j = y - 1;
   // eslint-disable-next-line for-direction
-  for (let i: number = x - 1; i >= 0; i--) {
-    const current = board[i][j];
+  for (let i: number = x + 1; i >= 0; i--) {
+    const current = board[j][i];
     if (current === differentColor) {
       differentColorIsNext = true;
     } else if (current === c) {
@@ -197,31 +197,26 @@ function rightUpToLeftBottom(
   c: number,
   board: number[][],
 ): [number, number, boolean] {
-  board[x][y] = c;
-  let canput = true;
+  board[y][x] = c;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  let j = y - 1;
   // eslint-disable-next-line for-direction
-  for (let i: number = x + 1; i < 8; i++) {
-    const current = board[i][j];
-    if (current === differentColor) {
-      differentColorIsNext = true;
-    } else if (current === c) {
-      last = i;
-      break;
-    } else {
-      canput = false;
+  for (let i: number = x - 1; i >= 0; i--) {
+    for (let j: number = y + 1; j < 8; j++) {
+      const current = board[j][i];
+      if (current === differentColor) {
+        differentColorIsNext = true;
+      } else if (current === c && differentColorIsNext === true) {
+        last = i;
+        return [last, j, true];
+
+        break;
+      }
     }
-    j--;
   }
 
-  if (canput === true && differentColorIsNext === true) {
-    return [last, j, true];
-  } else {
-    return [-1, -1, false];
-  }
+  return [-1, -1, false];
 }
 
 function rightBottomToLeftUp(
@@ -230,7 +225,7 @@ function rightBottomToLeftUp(
   c: number,
   board: number[][],
 ): [number, number, boolean] {
-  board[x][y] = c;
+  board[y][x] = c;
   let canput = true;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
@@ -297,18 +292,41 @@ function canPut(x: number, y: number, c: number, board: number[][]): [boolean, n
   const result2 = upToBottom(x, y, c, structuredClone(board));
   const result3 = leftToRight(x, y, c, structuredClone(board));
   const result4 = rightToLeft(x, y, c, structuredClone(board));
-  if (result1[2] || result2[2] || result3[2] || result4[2]) {
+  const result5 = leftBottomToRightUp(x, y, c, structuredClone(board));
+  const result6 = rightUpToLeftBottom(x, y, c, structuredClone(board));
+  const result7 = rightBottomToLeftUp(x, y, c, structuredClone(board));
+  const result8 = leftUpToRightBottom(x, y, c, structuredClone(board));
+
+  if (
+    result1[2] ||
+    result2[2] ||
+    result3[2] ||
+    result4[2] ||
+    result5[2] ||
+    result6[2] ||
+    result7[2] ||
+    result8[2]
+  ) {
     ans = true;
   }
   result.push([result1[0], result1[1]]);
   result.push([result2[0], result2[1]]);
   result.push([result3[0], result3[1]]);
   result.push([result4[0], result4[1]]);
+  result.push([result5[0], result5[1]]);
+  result.push([result6[0], result6[1]]);
+  result.push([result7[0], result7[1]]);
+  result.push([result8[0], result8[1]]);
 
   console.log('1:', result1[2]);
   console.log('2:', result2[2]);
   console.log('3:', result3[2]);
   console.log('4:', result4[2]);
+  console.log('5:', result5[2]);
+  console.log('6:', result6[2]);
+  console.log('7:', result7[2]);
+  console.log('8:', result8[2]);
+
   console.log('done');
   return [ans, result];
 }
@@ -321,8 +339,8 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
+    [0, 0, 0, 2, 2, 0, 0, 0],
+    [0, 0, 0, 1, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
