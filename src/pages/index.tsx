@@ -40,6 +40,43 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
       for (let i = x; i >= dx; i--) {
         board[y][i] = current_color;
       }
+    } else if (x < dx && y < dy) {
+      //左下から右上の場合
+      let j = y;
+      // eslint-disable-next-line for-direction
+      for (let i = x; i <= dx; i++) {
+        board[j][i] = current_color;
+        j++;
+        if (i === dx || j === dy) break;
+      }
+    } else if (x > dx && y > dy) {
+      //右上から左下の場合
+      let j = y;
+      // eslint-disable-next-line for-direction
+      for (let i = x; i >= dx; i--) {
+        board[j][i] = current_color;
+        j--;
+        if (i === dx || j === dy) break;
+      }
+    } else if (x > dx && y < dy) {
+      //左上から右下の場合
+      let j = y;
+      // eslint-disable-next-line for-direction
+      for (let i = x; i >= dx; i--) {
+        board[j][i] = current_color;
+        j++;
+        if (i === dx || j === dy) break;
+      }
+    }
+    //右下から左上の場合
+    else if (x < dx && y > dy) {
+      let j = y;
+      // eslint-disable-next-line for-direction
+      for (let i = x; i <= dx; i++) {
+        board[j][i] = current_color;
+        j--;
+        if (i === dx || j === dy) break;
+      }
     }
   }
 
@@ -329,8 +366,8 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 2, 2, 0, 0, 0],
     [0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 0, 2, 2, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
