@@ -7,6 +7,8 @@ const discColor = (num: number): string => {
     return 'white';
   } else if (num === 2) {
     return 'black';
+  } else if (num === 3) {
+    return 'gray';
   } else {
     return 'transparent';
   }
@@ -373,36 +375,68 @@ const Home = () => {
   const [board, setBoard] = useState<number[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 3, 0, 0, 0, 0],
+    [0, 0, 3, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 3, 0, 0],
+    [0, 0, 0, 0, 3, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const [player, setPlayer] = useState<number>(2); // 1 is white, 2 is black
 
-  const clickCell = (x: number, y: number) => {
+  const [status, setStatus] = useState<string>('Playing');
+
+  const clickCell = (x: number, y: number, p: number, s: string) => {
     let board_copy = structuredClone(board);
     console.log('click');
-    if (board_copy[y][x] === 0) {
-      const can = canPut(x, y, player, structuredClone(board_copy));
-      if (can[0]) {
+    if (board_copy[y][x] === 3) {
+      const can = canPut(x, y, p, structuredClone(board_copy));
+      if (can[0] && (s === 'Playing' || s === 'Pass')) {
         //copy board
-        board_copy[y][x] = player;
+        board_copy[y][x] = p;
 
         board_copy = update_board(x, y, can[1], board_copy);
 
-        setBoard(board_copy);
         // run if click
-        if (player === 1) {
+        if (p === 1) {
           setPlayer(2);
+          // eslint-disable-next-line no-param-reassign
+          p = 2;
         } else {
           setPlayer(1);
+          // eslint-disable-next-line no-param-reassign
+          p = 1;
         }
-      } else {
+      }
+    }
+
+    // set recommend location
+    let next_can_put = false;
+
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        // reset recommend
+        if (board_copy[y][x] === 3) {
+          board_copy[y][x] = 0;
+        }
+
+        // set new recommend
+        const can = canPut(x, y, p, structuredClone(board_copy));
+        if (can[0] === true && board_copy[y][x] === 0) {
+          board_copy[y][x] = 3;
+          next_can_put = true;
+        }
+      }
+    }
+    setBoard(board_copy);
+
+    if (next_can_put === false) {
+      if (s === 'progress') {
+        setStatus('Game Set');
         return;
       }
+      alert('pass');
+      clickCell(x, y, p, 'progress');
     }
   };
 
@@ -430,10 +464,15 @@ const Home = () => {
         <br />
         White: {count_disc()[0]} Black: {count_disc()[1]}
       </h3>
+      <p>Status: {status}</p>
       <div className={styles.board}>
         {board.map((row, i) =>
           row.map((cell, k) => (
-            <div key={`${i}-${k}`} className={styles.cell} onClick={() => clickCell(k, i)}>
+            <div
+              key={`${i}-${k}`}
+              className={styles.cell}
+              onClick={() => clickCell(k, i, player, status)}
+            >
               {cell !== 0 && (
                 <div className={styles.disc} style={{ backgroundColor: discColor(cell) }} />
               )}
