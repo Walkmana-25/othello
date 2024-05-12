@@ -448,6 +448,7 @@ const Home = () => {
       }
       alert('pass');
       clickCell(x, y, p, 'progress');
+      setStatus('Pass');
     }
   };
 
