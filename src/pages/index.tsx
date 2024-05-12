@@ -133,7 +133,7 @@ function rightToLeft(
   c: number,
   board: number[][],
 ): [number, number, boolean] {
-  board[x][y] = c;
+  board[y][x] = c;
   let canput = true;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
@@ -168,17 +168,20 @@ function leftBottomToRightUp(
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
+  let j = y - 1;
   // eslint-disable-next-line for-direction
-  for (let i: number = x + 1; i >= 0; i--) {
-    for (let j: number = y - 1; j < 8; j++) {
-      const current = board[j][i];
-      if (current === differentColor) {
-        differentColorIsNext = true;
-      } else if (current === c && differentColorIsNext === true) {
-        last = i;
-        return [last, j, true];
-      }
+  for (let i: number = x + 1; i < 8; i++) {
+    if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
+    const current = board[j][i];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c && differentColorIsNext === true) {
+      last = i;
+      return [last, j, true];
+    } else {
+      return [-1, -1, false];
     }
+    j--;
   }
 
   return [-1, -1, false];
@@ -194,19 +197,20 @@ function rightUpToLeftBottom(
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
+  let j = y + 1;
   // eslint-disable-next-line for-direction
   for (let i: number = x - 1; i >= 0; i--) {
-    for (let j: number = y + 1; j < 8; j++) {
-      const current = board[j][i];
-      if (current === differentColor) {
-        differentColorIsNext = true;
-      } else if (current === c && differentColorIsNext === true) {
-        last = i;
-        return [last, j, true];
-
-        break;
-      }
+    if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
+    const current = board[j][i];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c && differentColorIsNext === true) {
+      last = i;
+      return [last, j, true];
+    } else {
+      return [-1, -1, false];
     }
+    j++;
   }
 
   return [-1, -1, false];
@@ -222,17 +226,21 @@ function rightBottomToLeftUp(
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
+  let j = y - 1;
   // eslint-disable-next-line for-direction
   for (let i: number = x - 1; i >= 0; i--) {
-    for (let j: number = y - 1; j >= 0; j--) {
-      const current = board[i][j];
-      if (current === differentColor) {
-        differentColorIsNext = true;
-      } else if (current === c && differentColorIsNext === true) {
-        last = i;
-        return [last, j, true];
-      }
+    if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
+
+    const current = board[i][j];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c && differentColorIsNext === true) {
+      last = i;
+      return [last, j, true];
+    } else {
+      return [-1, -1, false];
     }
+    j--;
   }
   return [-1, -1, false];
 }
@@ -243,21 +251,25 @@ function leftUpToRightBottom(
   c: number,
   board: number[][],
 ): [number, number, boolean] {
-  board[x][y] = c;
+  board[y][x] = c;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
+  let j = y + 1;
   // eslint-disable-next-line for-direction
   for (let i: number = x + 1; i < 8; i++) {
-    for (let j: number = y + 1; j < 8; j++) {
-      const current = board[i][j];
-      if (current === differentColor) {
-        differentColorIsNext = true;
-      } else if (current === c && differentColorIsNext === true) {
-        last = i;
-        return [last, j, true];
-      }
+    if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
+
+    const current = board[j][i];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c && differentColorIsNext === true) {
+      last = i;
+      return [last, j, true];
+    } else {
+      return [-1, -1, false];
     }
+    j++;
   }
 
   return [-1, -1, false];
