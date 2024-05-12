@@ -19,22 +19,22 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
     //上から下の場合
     if (x === dx && y > dy) {
       // eslint-disable-next-line for-direction
-      for (let i = y; i <= dy; i++) {
+      for (let i = y; i >= dy; i--) {
         board[i][x] = current_color;
       }
     } else if (x === dx && y < dy) {
       // 下から上の場合
       // eslint-disable-next-line for-direction
-      for (let i = y; i >= dy; i--) {
+      for (let i = y; i <= dy; i++) {
         board[i][x] = current_color;
       }
-    } else if (y === dy && x > dx) {
+    } else if (y === dy && x < dx) {
       //左から右の場合
       // eslint-disable-next-line for-direction
       for (let i = x; i <= dx; i++) {
         board[y][i] = current_color;
       }
-    } else if (y === dy && x < dx) {
+    } else if (y === dy && x > dx) {
       //右から左の場合
       // eslint-disable-next-line for-direction
       for (let i = x; i >= dx; i--) {
@@ -153,6 +153,138 @@ function rightToLeft(
 
   if (canput === true && differentColorIsNext === true) {
     return [last, y, true];
+  } else {
+    return [-1, -1, false];
+  }
+}
+
+function leftBottomToRightUp(
+  x: number,
+  y: number,
+  c: number,
+  board: number[][],
+): [number, number, boolean] {
+  board[x][y] = c;
+  let canput = true;
+  let differentColorIsNext = false;
+  const differentColor = c === 1 ? 2 : 1;
+  let last = 0;
+  let j = y + 1;
+  // eslint-disable-next-line for-direction
+  for (let i: number = x - 1; i >= 0; i--) {
+    const current = board[i][j];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c) {
+      last = i;
+      break;
+    } else {
+      canput = false;
+    }
+    j++;
+  }
+
+  if (canput === true && differentColorIsNext === true) {
+    return [last, j, true];
+  } else {
+    return [-1, -1, false];
+  }
+}
+
+function rightUpToLeftBottom(
+  x: number,
+  y: number,
+  c: number,
+  board: number[][],
+): [number, number, boolean] {
+  board[x][y] = c;
+  let canput = true;
+  let differentColorIsNext = false;
+  const differentColor = c === 1 ? 2 : 1;
+  let last = 0;
+  let j = y - 1;
+  // eslint-disable-next-line for-direction
+  for (let i: number = x + 1; i < 8; i++) {
+    const current = board[i][j];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c) {
+      last = i;
+      break;
+    } else {
+      canput = false;
+    }
+    j--;
+  }
+
+  if (canput === true && differentColorIsNext === true) {
+    return [last, j, true];
+  } else {
+    return [-1, -1, false];
+  }
+}
+
+function rightBottomToLeftUp(
+  x: number,
+  y: number,
+  c: number,
+  board: number[][],
+): [number, number, boolean] {
+  board[x][y] = c;
+  let canput = true;
+  let differentColorIsNext = false;
+  const differentColor = c === 1 ? 2 : 1;
+  let last = 0;
+  let j = y - 1;
+  // eslint-disable-next-line for-direction
+  for (let i: number = x - 1; i >= 0; i--) {
+    const current = board[i][j];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c) {
+      last = i;
+      break;
+    } else {
+      canput = false;
+    }
+    j--;
+  }
+
+  if (canput === true && differentColorIsNext === true) {
+    return [last, j, true];
+  } else {
+    return [-1, -1, false];
+  }
+}
+
+function leftUpToRightBottom(
+  x: number,
+  y: number,
+  c: number,
+  board: number[][],
+): [number, number, boolean] {
+  board[x][y] = c;
+  let canput = true;
+  let differentColorIsNext = false;
+  const differentColor = c === 1 ? 2 : 1;
+  let last = 0;
+  let j = y + 1;
+  // eslint-disable-next-line for-direction
+  for (let i: number = x + 1; i < 8; i++) {
+    const current = board[i][j];
+    if (current === differentColor) {
+      differentColorIsNext = true;
+    } else if (current === c) {
+      last = i;
+      break;
+    } else {
+      canput = false;
+    }
+    j++;
+  }
+
+  if (canput === true && differentColorIsNext === true) {
+    return [last, j, true];
   } else {
     return [-1, -1, false];
   }
