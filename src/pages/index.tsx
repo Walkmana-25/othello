@@ -16,32 +16,38 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
   const current_color = board[y][x];
 
   for (const [dx, dy] of range) {
+    if (dx === -1 || dy === -1) continue;
     //上から下の場合
-    if (x === dx && y > dy) {
+    else if (x === dx && y > dy) {
+      console.log('上から下の場合');
       // eslint-disable-next-line for-direction
       for (let i = y; i >= dy; i--) {
         board[i][x] = current_color;
       }
     } else if (x === dx && y < dy) {
       // 下から上の場合
+      console.log('下から上の場合');
       // eslint-disable-next-line for-direction
       for (let i = y; i <= dy; i++) {
         board[i][x] = current_color;
       }
     } else if (y === dy && x < dx) {
       //左から右の場合
+      console.log('左から右の場合');
       // eslint-disable-next-line for-direction
       for (let i = x; i <= dx; i++) {
         board[y][i] = current_color;
       }
     } else if (y === dy && x > dx) {
       //右から左の場合
+      console.log('右から左の場合');
       // eslint-disable-next-line for-direction
       for (let i = x; i >= dx; i--) {
         board[y][i] = current_color;
       }
     } else if (x < dx && y < dy) {
       //左下から右上の場合
+      console.log('左下から右上の場合');
       let j = y;
       // eslint-disable-next-line for-direction
       for (let i = x; i <= dx; i++) {
@@ -51,6 +57,7 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
       }
     } else if (x > dx && y > dy) {
       //右上から左下の場合
+      console.log('右上から左下の場合');
       let j = y;
       // eslint-disable-next-line for-direction
       for (let i = x; i >= dx; i--) {
@@ -60,6 +67,7 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
       }
     } else if (x > dx && y < dy) {
       //左上から右下の場合
+      console.log('左上から右下の場合');
       let j = y;
       // eslint-disable-next-line for-direction
       for (let i = x; i >= dx; i--) {
@@ -67,9 +75,9 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
         j++;
         if (i === dx || j === dy) break;
       }
-    }
-    //右下から左上の場合
-    else if (x < dx && y > dy) {
+    } else if (x < dx && y > dy) {
+      //右下から左上の場合
+      console.log('右下から左上の場合');
       let j = y;
       // eslint-disable-next-line for-direction
       for (let i = x; i <= dx; i++) {
@@ -366,13 +374,13 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 0, 0, 0],
-    [0, 0, 0, 2, 2, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-  const [player, setPlayer] = useState<number>(1); // 1 is white, 2 is black
+  const [player, setPlayer] = useState<number>(2); // 1 is white, 2 is black
 
   const clickCell = (x: number, y: number) => {
     let board_copy = structuredClone(board);
@@ -398,10 +406,30 @@ const Home = () => {
     }
   };
 
+  const count_disc = (): [number, number] => {
+    let white = 0;
+    let black = 0;
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (board[i][j] === 1) {
+          white++;
+        } else if (board[i][j] === 2) {
+          black++;
+        }
+      }
+    }
+    return [white, black];
+  };
+
   return (
     <>
-      <h1>othello</h1>
+      <h1>Othello</h1>
       <h2>Player: {player === 1 ? 'White' : 'Black'}</h2>
+      <h3>
+        Score
+        <br />
+        White: {count_disc()[0]} Black: {count_disc()[1]}
+      </h3>
       <div className={styles.board}>
         {board.map((row, i) =>
           row.map((cell, k) => (
