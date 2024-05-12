@@ -165,30 +165,23 @@ function leftBottomToRightUp(
   board: number[][],
 ): [number, number, boolean] {
   board[y][x] = c;
-  let canput = true;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  let j = y - 1;
   // eslint-disable-next-line for-direction
   for (let i: number = x + 1; i >= 0; i--) {
-    const current = board[j][i];
-    if (current === differentColor) {
-      differentColorIsNext = true;
-    } else if (current === c) {
-      last = i;
-      break;
-    } else {
-      canput = false;
+    for (let j: number = y - 1; j < 8; j++) {
+      const current = board[j][i];
+      if (current === differentColor) {
+        differentColorIsNext = true;
+      } else if (current === c && differentColorIsNext === true) {
+        last = i;
+        return [last, j, true];
+      }
     }
-    j++;
   }
 
-  if (canput === true && differentColorIsNext === true) {
-    return [last, j, true];
-  } else {
-    return [-1, -1, false];
-  }
+  return [-1, -1, false];
 }
 
 function rightUpToLeftBottom(
@@ -226,30 +219,22 @@ function rightBottomToLeftUp(
   board: number[][],
 ): [number, number, boolean] {
   board[y][x] = c;
-  let canput = true;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  let j = y - 1;
   // eslint-disable-next-line for-direction
   for (let i: number = x - 1; i >= 0; i--) {
-    const current = board[i][j];
-    if (current === differentColor) {
-      differentColorIsNext = true;
-    } else if (current === c) {
-      last = i;
-      break;
-    } else {
-      canput = false;
+    for (let j: number = y - 1; j >= 0; j--) {
+      const current = board[i][j];
+      if (current === differentColor) {
+        differentColorIsNext = true;
+      } else if (current === c && differentColorIsNext === true) {
+        last = i;
+        return [last, j, true];
+      }
     }
-    j--;
   }
-
-  if (canput === true && differentColorIsNext === true) {
-    return [last, j, true];
-  } else {
-    return [-1, -1, false];
-  }
+  return [-1, -1, false];
 }
 
 function leftUpToRightBottom(
@@ -259,30 +244,23 @@ function leftUpToRightBottom(
   board: number[][],
 ): [number, number, boolean] {
   board[x][y] = c;
-  let canput = true;
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  let j = y + 1;
   // eslint-disable-next-line for-direction
   for (let i: number = x + 1; i < 8; i++) {
-    const current = board[i][j];
-    if (current === differentColor) {
-      differentColorIsNext = true;
-    } else if (current === c) {
-      last = i;
-      break;
-    } else {
-      canput = false;
+    for (let j: number = y + 1; j < 8; j++) {
+      const current = board[i][j];
+      if (current === differentColor) {
+        differentColorIsNext = true;
+      } else if (current === c && differentColorIsNext === true) {
+        last = i;
+        return [last, j, true];
+      }
     }
-    j++;
   }
 
-  if (canput === true && differentColorIsNext === true) {
-    return [last, j, true];
-  } else {
-    return [-1, -1, false];
-  }
+  return [-1, -1, false];
 }
 
 function canPut(x: number, y: number, c: number, board: number[][]): [boolean, number[][]] {
