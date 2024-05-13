@@ -501,7 +501,7 @@ const Home = () => {
             onClick={() => {
               window.location.reload();
             }}
-            className="justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="justify-center m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Reload
           </button>
