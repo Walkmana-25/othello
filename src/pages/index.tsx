@@ -377,27 +377,17 @@ const Home = () => {
   //othello board
   // 8 x 8
   // 1 is white, 2 is black
-  //  const [board, setBoard] = useState<number[][]>([
-  //    [0, 0, 0, 0, 0, 0, 0, 0],
-  //    [0, 0, 0, 0, 0, 0, 0, 0],
-  //    [0, 0, 0, 3, 0, 0, 0, 0],
-  //    [0, 0, 3, 1, 2, 0, 0, 0],
-  //    [0, 0, 0, 2, 1, 3, 0, 0],
-  //    [0, 0, 0, 0, 3, 0, 0, 0],
-  //    [0, 0, 0, 0, 0, 0, 0, 0],
-  //    [0, 0, 0, 0, 0, 0, 0, 0],
-  //  ]);
-
   const [board, setBoard] = useState<number[][]>([
-    [2, 1, 3, 0, 0, 0, 0, 0],
-    [1, 1, 3, 0, 0, 0, 0, 0],
-    [3, 3, 3, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 3, 0, 0, 0, 0],
+    [0, 0, 3, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 3, 0, 0],
+    [0, 0, 0, 0, 3, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+
   const [player, setPlayer] = useState<number>(2); // 1 is white, 2 is black
 
   const [status, setStatus] = useState<string>('Playing');
@@ -416,18 +406,17 @@ const Home = () => {
 
         // eslint-disable-next-line no-param-reassign
         board_copy = update_board(x, y, can[1], board_copy);
-
-        // run if click
-        if (p === 1) {
-          setPlayer(2);
-          // eslint-disable-next-line no-param-reassign
-          p = 2;
-        } else {
-          setPlayer(1);
-          // eslint-disable-next-line no-param-reassign
-          p = 1;
-        }
       }
+    }
+    // run if click
+    if (p === 1) {
+      setPlayer(2);
+      // eslint-disable-next-line no-param-reassign
+      p = 2;
+    } else {
+      setPlayer(1);
+      // eslint-disable-next-line no-param-reassign
+      p = 1;
     }
 
     // set recommend location
