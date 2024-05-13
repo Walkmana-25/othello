@@ -496,7 +496,7 @@ const Home = () => {
           {winner()}
         </h3>
         <p>Status: {status}</p>
-        <div className="flex justify-center items-center ">
+        <div className="flex justify-center items-stretch h-fit">
           <div className="bg-green-800 grid grid-cols-8 aspect-square">
             {board.map((row, i) =>
               row.map((cell, k) => (
