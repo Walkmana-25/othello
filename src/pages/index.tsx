@@ -397,8 +397,9 @@ const Home = () => {
     if (s === 'Game Set') {
       return;
     }
+    const current = structuredClone(board_copy[y][x]);
 
-    if (board_copy[y][x] === 3) {
+    if (current === 3) {
       const can = canPut(x, y, p, structuredClone(board_copy));
       if (can[0] && (s === 'Playing' || s === 'Pass')) {
         //copy board
@@ -409,14 +410,16 @@ const Home = () => {
       }
     }
     // run if click
-    if (p === 1) {
-      setPlayer(2);
-      // eslint-disable-next-line no-param-reassign
-      p = 2;
-    } else {
-      setPlayer(1);
-      // eslint-disable-next-line no-param-reassign
-      p = 1;
+    if (current === 3 || s === 'progress') {
+      if (p === 1) {
+        setPlayer(2);
+        // eslint-disable-next-line no-param-reassign
+        p = 2;
+      } else {
+        setPlayer(1);
+        // eslint-disable-next-line no-param-reassign
+        p = 1;
+      }
     }
 
     // set recommend location
@@ -480,30 +483,37 @@ const Home = () => {
 
   return (
     <>
-      <h1>Othello</h1>
-      <h2>Player: {player === 1 ? 'White' : 'Black'}</h2>
-      <h3>
-        Score
-        <br />
-        White: {count_disc()[0]} Black: {count_disc()[1]}
-        <br />
-        {winner()}
-      </h3>
-      <p>Status: {status}</p>
-      <div className={styles.board}>
-        {board.map((row, i) =>
-          row.map((cell, k) => (
-            <div
-              key={`${i}-${k}`}
-              className={styles.cell}
-              onClick={() => clickCell(k, i, player, status, structuredClone(board))}
-            >
-              {cell !== 0 && (
-                <div className={styles.disc} style={{ backgroundColor: discColor(cell) }} />
-              )}
-            </div>
-          )),
-        )}
+      <div className="bg-slate-200 flex-auto h-screen">
+        <h1 className="text-5xl text-green-700 text-center font-semibold">Othello Game</h1>
+        <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
+          <h2>Player: {player === 1 ? 'White' : 'Black'}</h2>
+        </div>
+        <h3>
+          Score
+          <br />
+          White: {count_disc()[0]} Black: {count_disc()[1]}
+          <br />
+          {winner()}
+        </h3>
+        <p>Status: {status}</p>
+        <div className="flex justify-center items-center ">
+          <div className="bg-green-800 grid grid-cols-8 aspect-square">
+            {board.map((row, i) =>
+              row.map((cell, k) => (
+                <div
+                  key={`${i}-${k}`}
+                  //className={styles.cell}
+                  className="border border-black aspect-square"
+                  onClick={() => clickCell(k, i, player, status, structuredClone(board))}
+                >
+                  {cell !== 0 && (
+                    <div className={styles.disc} style={{ backgroundColor: discColor(cell) }} />
+                  )}
+                </div>
+              )),
+            )}
+          </div>
+        </div>
       </div>
     </>
   );
