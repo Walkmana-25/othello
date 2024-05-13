@@ -402,15 +402,19 @@ const Home = () => {
 
   const [status, setStatus] = useState<string>('Playing');
 
-  const clickCell = (x: number, y: number, p: number, s: string) => {
-    let board_copy = structuredClone(board);
+  const clickCell = (x: number, y: number, p: number, s: string, board_copy: number[][]) => {
     console.log('click');
+    if (s === 'Game Set') {
+      return;
+    }
+
     if (board_copy[y][x] === 3) {
       const can = canPut(x, y, p, structuredClone(board_copy));
       if (can[0] && (s === 'Playing' || s === 'Pass')) {
         //copy board
         board_copy[y][x] = p;
 
+        // eslint-disable-next-line no-param-reassign
         board_copy = update_board(x, y, can[1], board_copy);
 
         // run if click
@@ -452,8 +456,8 @@ const Home = () => {
         return;
       }
       alert('pass');
-      clickCell(x, y, p, 'progress');
       setStatus('Pass');
+      clickCell(x, y, p, 'progress', structuredClone(board_copy));
     }
   };
   const count_disc = (): [number, number] => {
@@ -471,6 +475,20 @@ const Home = () => {
     return [white, black];
   };
 
+  const winner = (): string => {
+    const count = count_disc();
+    if (status === 'Game Set') {
+      if (count[0] > count[1]) {
+        return 'White Win!!';
+      } else if (count[0] < count[1]) {
+        return 'Black Win!!';
+      } else {
+        return 'Draw';
+      }
+    }
+    return '';
+  };
+
   return (
     <>
       <h1>Othello</h1>
@@ -479,6 +497,8 @@ const Home = () => {
         Score
         <br />
         White: {count_disc()[0]} Black: {count_disc()[1]}
+        <br />
+        {winner()}
       </h3>
       <p>Status: {status}</p>
       <div className={styles.board}>
@@ -487,7 +507,7 @@ const Home = () => {
             <div
               key={`${i}-${k}`}
               className={styles.cell}
-              onClick={() => clickCell(k, i, player, status)}
+              onClick={() => clickCell(k, i, player, status, structuredClone(board))}
             >
               {cell !== 0 && (
                 <div className={styles.disc} style={{ backgroundColor: discColor(cell) }} />
