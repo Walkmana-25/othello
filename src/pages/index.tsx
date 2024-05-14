@@ -376,8 +376,9 @@ const Home = () => {
 
   const [status, setStatus] = useState<string>('Playing');
 
-  const clickCell = (x: number, y: number, p: number, s: string, board_copy: number[][]) => {
+  const clickCell = (x: number, y: number, p: number, s: string, board: number[][]) => {
     console.log('click');
+    let board_copy = structuredClone(board);
     if (s === 'Game Set') {
       return;
     }
@@ -389,7 +390,6 @@ const Home = () => {
         //copy board
         board_copy[y][x] = p;
 
-        // eslint-disable-next-line no-param-reassign
         board_copy = updateBoard(x, y, can[1], board_copy);
       }
     }
