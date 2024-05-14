@@ -498,7 +498,6 @@ const Home = () => {
                 onClick={() => clickCell(k, i, player, status, structuredClone(board))}
               >
                 {cell !== 0 && (
-                  //<div className={styles.disc} style={{ backgroundColor: discColor(cell) }} />
                   <div
                     className="rounded-full flex justify-center items-center m-2 h-3/4 w-3/4 aspect-square"
                     style={{ backgroundColor: discColor(cell) }}
