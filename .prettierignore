@@ -1,5 +1,4 @@
 .github/dependabot.yml
 .github/workflows/deploy-client.yml
 .github/workflows/test.yml
-postcss.config.js
 README.md
