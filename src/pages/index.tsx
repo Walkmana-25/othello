@@ -9,14 +9,15 @@
 import { useState } from 'react';
 
 const discColor = (num: number): string => {
-  if (num === 1) {
-    return 'white';
-  } else if (num === 2) {
-    return 'black';
-  } else if (num === 3) {
-    return 'gray';
-  } else {
-    return 'transparent';
+  switch (num) {
+    case 1:
+      return 'white';
+    case 2:
+      return 'black';
+    case 3:
+      return 'gray';
+    default:
+      return 'transparent';
   }
 };
 
@@ -383,14 +384,14 @@ const Home = () => {
 
   const [status, setStatus] = useState<string>('Playing');
 
-  const boardWithNextDirection = (board: number[][]): number[][] => {
+  const boardWithNextDirection = (board: number[][], player: number): number[][] => {
     const board_copy = structuredClone(board);
 
     for (let line: number = 0; line < 8; line++) {
       for (let cell: number = 0; cell < 8; cell++) {
         const resultCanPut = canPut(line, cell, player, structuredClone(board));
-        if (resultCanPut[0] === true && board_copy[line][cell] === 0) {
-          board_copy[line][cell] = 3;
+        if (resultCanPut[0] === true && board_copy[cell][line] === 0) {
+          board_copy[cell][line] = 3;
         }
       }
     }
@@ -400,9 +401,7 @@ const Home = () => {
   const clickCell = (x: number, y: number, p: number, s: string, board: number[][]) => {
     console.log('click');
     let board_copy = structuredClone(board);
-    if (s === 'Game Set') {
-      return;
-    }
+
     const current = structuredClone(board_copy[y][x]);
 
     if (current === 0) {
@@ -412,55 +411,34 @@ const Home = () => {
         board_copy[y][x] = p;
 
         board_copy = updateBoard(x, y, can[1], board_copy);
-      }
-    }
-    let player_id = 0;
-    // run if click
-    if (current === 0 || s === 'progress') {
-      if (p === 1) {
-        setPlayer(2);
-        player_id = 2;
-      } else {
-        setPlayer(1);
-        player_id = 1;
-      }
-    }
 
-    // set recommend location
-    let next_can_put = false;
-
-    for (let x = 0; x < 8; x++) {
-      for (let y = 0; y < 8; y++) {
-        // set new recommend
-        const can = canPut(x, y, player_id, structuredClone(board_copy));
-        if (can[0] === true && board_copy[y][x] === 0) {
-          next_can_put = true;
+        //change turn
+        if (current === 0) {
+          if (p === 1) {
+            setPlayer(2);
+          } else {
+            setPlayer(1);
+          }
         }
       }
     }
     setBoard(board_copy);
-
-    if (next_can_put === false) {
-      if (s === 'progress') {
-        setStatus('Game Set');
-        return;
-      }
-      setStatus('Pass');
-      clickCell(x, y, player_id, 'progress', structuredClone(board_copy));
-    }
   };
+
   const countDisc = (): [number, number] => {
     let white = 0;
     let black = 0;
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        if (board[i][j] === 1) {
+
+    board.map((line) => {
+      line.map((disc) => {
+        if (disc === 1) {
           white++;
-        } else if (board[i][j] === 2) {
+        } else if (disc === 2) {
           black++;
         }
-      }
-    }
+      });
+    });
+
     return [white, black];
   };
 
@@ -504,7 +482,7 @@ const Home = () => {
       </div>
       <div className="flex justify-center items-center m-5 aspect-square">
         <div className="bg-green-800 grid grid-cols-8 aspect-square w-full">
-          {boardWithNextDirection(board).map((row, i) =>
+          {boardWithNextDirection(board, player).map((row, i) =>
             row.map((cell, k) => (
               <div
                 key={`${i}-${k}`}
