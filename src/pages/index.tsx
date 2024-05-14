@@ -13,7 +13,7 @@ const discColor = (num: number): string => {
   }
 };
 
-function update_board(x: number, y: number, range: number[][], board: number[][]): number[][] {
+function updateBoard(x: number, y: number, range: number[][], board: number[][]): number[][] {
   const current_color = board[y][x];
 
   for (const [dx, dy] of range) {
@@ -390,7 +390,7 @@ const Home = () => {
         board_copy[y][x] = p;
 
         // eslint-disable-next-line no-param-reassign
-        board_copy = update_board(x, y, can[1], board_copy);
+        board_copy = updateBoard(x, y, can[1], board_copy);
       }
     }
     let player_id = 0;
@@ -434,7 +434,7 @@ const Home = () => {
       clickCell(x, y, player_id, 'progress', structuredClone(board_copy));
     }
   };
-  const count_disc = (): [number, number] => {
+  const countDisc = (): [number, number] => {
     let white = 0;
     let black = 0;
     for (let i = 0; i < 8; i++) {
@@ -450,7 +450,7 @@ const Home = () => {
   };
 
   const winner = (): string => {
-    const count = count_disc();
+    const count = countDisc();
     if (status === 'Game Set') {
       if (count[0] > count[1]) {
         return 'White Win!!';
@@ -472,7 +472,7 @@ const Home = () => {
           <h3>
             Score
             <br />
-            White: {count_disc()[0]} Black: {count_disc()[1]}
+            White: {countDisc()[0]} Black: {countDisc()[1]}
             <br />
             {winner()}
           </h3>
