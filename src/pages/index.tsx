@@ -371,10 +371,10 @@ const Home = () => {
   const [board, setBoard] = useState<number[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 3, 0, 0, 0, 0],
-    [0, 0, 3, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 3, 0, 0],
-    [0, 0, 0, 0, 3, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
@@ -405,7 +405,7 @@ const Home = () => {
     }
     const current = structuredClone(board_copy[y][x]);
 
-    if (current === 3) {
+    if (current === 0) {
       const can = canPut(x, y, p, structuredClone(board_copy));
       if (can[0] && (s === 'Playing' || s === 'Pass')) {
         //copy board
@@ -416,7 +416,7 @@ const Home = () => {
     }
     let player_id = 0;
     // run if click
-    if (current === 3 || s === 'progress') {
+    if (current === 0 || s === 'progress') {
       if (p === 1) {
         setPlayer(2);
         player_id = 2;
@@ -431,15 +431,9 @@ const Home = () => {
 
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 8; y++) {
-        // reset recommend
-        if (board_copy[y][x] === 3) {
-          board_copy[y][x] = 0;
-        }
-
         // set new recommend
         const can = canPut(x, y, player_id, structuredClone(board_copy));
         if (can[0] === true && board_copy[y][x] === 0) {
-          board_copy[y][x] = 3;
           next_can_put = true;
         }
       }
