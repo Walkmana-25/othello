@@ -493,7 +493,6 @@ const Home = () => {
             row.map((cell, k) => (
               <div
                 key={`${i}-${k}`}
-                //className={styles.cell}
                 className="border border-black aspect-square"
                 onClick={() => clickCell(k, i, player, status, structuredClone(board))}
               >
