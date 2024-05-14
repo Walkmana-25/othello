@@ -21,28 +21,24 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
     //上から下の場合
     else if (x === dx && y > dy) {
       console.log('上から下の場合');
-      // eslint-disable-next-line for-direction
       for (let i = y; i >= dy; i--) {
         board[i][x] = current_color;
       }
     } else if (x === dx && y < dy) {
       // 下から上の場合
       console.log('下から上の場合');
-      // eslint-disable-next-line for-direction
       for (let i = y; i <= dy; i++) {
         board[i][x] = current_color;
       }
     } else if (y === dy && x < dx) {
       //左から右の場合
       console.log('左から右の場合');
-      // eslint-disable-next-line for-direction
       for (let i = x; i <= dx; i++) {
         board[y][i] = current_color;
       }
     } else if (y === dy && x > dx) {
       //右から左の場合
       console.log('右から左の場合');
-      // eslint-disable-next-line for-direction
       for (let i = x; i >= dx; i--) {
         board[y][i] = current_color;
       }
@@ -50,7 +46,6 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
       //左下から右上の場合
       console.log('左下から右上の場合');
       let j = y;
-      // eslint-disable-next-line for-direction
       for (let i = x; i <= dx; i++) {
         board[j][i] = current_color;
         j++;
@@ -60,7 +55,6 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
       //右上から左下の場合
       console.log('右上から左下の場合');
       let j = y;
-      // eslint-disable-next-line for-direction
       for (let i = x; i >= dx; i--) {
         board[j][i] = current_color;
         j--;
@@ -70,7 +64,6 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
       //左上から右下の場合
       console.log('左上から右下の場合');
       let j = y;
-      // eslint-disable-next-line for-direction
       for (let i = x; i >= dx; i--) {
         board[j][i] = current_color;
         j++;
@@ -80,7 +73,6 @@ function update_board(x: number, y: number, range: number[][], board: number[][]
       //右下から左上の場合
       console.log('右下から左上の場合');
       let j = y;
-      // eslint-disable-next-line for-direction
       for (let i = x; i <= dx; i++) {
         board[j][i] = current_color;
         j--;
@@ -120,7 +112,6 @@ function upToBottom(x: number, y: number, c: number, board: number[][]): [number
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  // eslint-disable-next-line for-direction
   for (let i: number = y + 1; i < 8; i++) {
     const current = board[i][x];
     if (current === 3 || current === 0) {
@@ -148,7 +139,6 @@ function leftToRight(
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  // eslint-disable-next-line for-direction
   for (let i: number = x + 1; i < 8; i++) {
     const current = board[y][i];
     if (current === 3 || current === 0) {
@@ -177,7 +167,6 @@ function rightToLeft(
   let differentColorIsNext = false;
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
-  // eslint-disable-next-line for-direction
   for (let i: number = x - 1; i >= 0; i--) {
     const current = board[y][i];
     if (current === 3 || current === 0) {
@@ -207,7 +196,6 @@ function leftBottomToRightUp(
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
   let j = y - 1;
-  // eslint-disable-next-line for-direction
   for (let i: number = x + 1; i < 8; i++) {
     if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
     const current = board[j][i];
@@ -239,7 +227,6 @@ function rightUpToLeftBottom(
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
   let j = y + 1;
-  // eslint-disable-next-line for-direction
   for (let i: number = x - 1; i >= 0; i--) {
     if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
     const current = board[j][i];
@@ -271,7 +258,6 @@ function rightBottomToLeftUp(
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
   let j = y - 1;
-  // eslint-disable-next-line for-direction
   for (let i: number = x - 1; i >= 0; i--) {
     if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
 
@@ -303,7 +289,6 @@ function leftUpToRightBottom(
   const differentColor = c === 1 ? 2 : 1;
   let last = 0;
   let j = y + 1;
-  // eslint-disable-next-line for-direction
   for (let i: number = x + 1; i < 8; i++) {
     if (i < 0 || j < 0 || 7 < i || 7 < j) return [-1, -1, false];
 
@@ -408,16 +393,15 @@ const Home = () => {
         board_copy = update_board(x, y, can[1], board_copy);
       }
     }
+    let player_id = 0;
     // run if click
     if (current === 3 || s === 'progress') {
       if (p === 1) {
         setPlayer(2);
-        // eslint-disable-next-line no-param-reassign
-        p = 2;
+        player_id = 2;
       } else {
         setPlayer(1);
-        // eslint-disable-next-line no-param-reassign
-        p = 1;
+        player_id = 1;
       }
     }
 
@@ -432,7 +416,7 @@ const Home = () => {
         }
 
         // set new recommend
-        const can = canPut(x, y, p, structuredClone(board_copy));
+        const can = canPut(x, y, player_id, structuredClone(board_copy));
         if (can[0] === true && board_copy[y][x] === 0) {
           board_copy[y][x] = 3;
           next_can_put = true;
@@ -447,7 +431,7 @@ const Home = () => {
         return;
       }
       setStatus('Pass');
-      clickCell(x, y, p, 'progress', structuredClone(board_copy));
+      clickCell(x, y, player_id, 'progress', structuredClone(board_copy));
     }
   };
   const count_disc = (): [number, number] => {
