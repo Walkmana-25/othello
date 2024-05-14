@@ -1,3 +1,10 @@
+// Click時のやることを減らす
+// 候補地の計算は別の場所で行う。
+// 再描写のタイミングを考えながら、、、、
+// 候補地を、ユーザーのインプットと混同しない。
+// 状態の中の情報を減らす。今0,1,2,3 -> 0,1,2
+// Directions 方向を一つのところにまとめて、掛け算にて判定するようにする
+
 'use client';
 import { useState } from 'react';
 
@@ -376,6 +383,20 @@ const Home = () => {
 
   const [status, setStatus] = useState<string>('Playing');
 
+  const boardWithNextDirection = (board: number[][]): number[][] => {
+    const board_copy = structuredClone(board);
+
+    for (let line: number = 0; line < 8; line++) {
+      for (let cell: number = 0; cell < 8; cell++) {
+        const resultCanPut = canPut(line, cell, player, structuredClone(board));
+        if (resultCanPut[0] === true) {
+          board_copy[line][cell] = 3;
+        }
+      }
+    }
+    return board_copy;
+  };
+
   const clickCell = (x: number, y: number, p: number, s: string, board: number[][]) => {
     console.log('click');
     let board_copy = structuredClone(board);
@@ -489,7 +510,7 @@ const Home = () => {
       </div>
       <div className="flex justify-center items-center m-5 aspect-square">
         <div className="bg-green-800 grid grid-cols-8 aspect-square w-full">
-          {board.map((row, i) =>
+          {boardWithNextDirection(board).map((row, i) =>
             row.map((cell, k) => (
               <div
                 key={`${i}-${k}`}
