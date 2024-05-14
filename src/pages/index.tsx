@@ -1,5 +1,4 @@
 'use client';
-import styles from './index.module.css';
 import { useState } from 'react';
 
 const discColor = (num: number): string => {
