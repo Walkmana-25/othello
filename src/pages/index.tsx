@@ -389,7 +389,7 @@ const Home = () => {
     for (let line: number = 0; line < 8; line++) {
       for (let cell: number = 0; cell < 8; cell++) {
         const resultCanPut = canPut(line, cell, player, structuredClone(board));
-        if (resultCanPut[0] === true) {
+        if (resultCanPut[0] === true && board_copy[line][cell] === 0) {
           board_copy[line][cell] = 3;
         }
       }
