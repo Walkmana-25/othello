@@ -319,7 +319,12 @@ function leftUpToRightBottom(
   return [-1, -1, false];
 }
 
-function canPut(x: number, y: number, c: number, board: number[][]): [boolean, number[][]] {
+function canPutWithPlace(
+  x: number,
+  y: number,
+  c: number,
+  board: number[][],
+): [boolean, number[][]] {
   let ans = false;
   const result = [];
   const result1 = bottomToUp(x, y, c, structuredClone(board));
@@ -362,6 +367,27 @@ function canPut(x: number, y: number, c: number, board: number[][]): [boolean, n
   console.log('8:', result8[2]);
 
   console.log('done');
+
+  const directions: number[][] = [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+  ];
+  for (const direction of directions) {
+    const dx = direction[0];
+    const dy = direction[1];
+    console.log(dx, dy);
+    for (let i: number = 1; i < 8; i++) {
+      const cx: number = x + dx * i;
+      const cy: number = y + dy * i;
+    }
+  }
+
   return [ans, result];
 }
 
@@ -382,7 +408,7 @@ const Home = () => {
 
   const [player, setPlayer] = useState<number>(2); // 1 is white, 2 is black
 
-  const [status, setStatus] = useState<string>('Playing');
+  const [status, setStatus] = useState<string>('Playing'); //Playing, pass and Game Set
 
   const boardWithNextDirection = (
     board: number[][],
@@ -394,7 +420,7 @@ const Home = () => {
 
     for (let line: number = 0; line < 8; line++) {
       for (let cell: number = 0; cell < 8; cell++) {
-        const resultCanPut = canPut(line, cell, player, structuredClone(board));
+        const resultCanPut = canPutWithPlace(line, cell, player, structuredClone(board));
         if (resultCanPut[0] === true && board_copy[cell][line] === 0) {
           board_copy[cell][line] = 3;
           userCanPut = true;
@@ -434,7 +460,7 @@ const Home = () => {
     const current = structuredClone(board_copy[y][x]);
 
     if (current === 0) {
-      const can = canPut(x, y, p, structuredClone(board_copy));
+      const can = canPutWithPlace(x, y, p, structuredClone(board_copy));
       if (can[0] && (s === 'Playing' || s === 'Pass')) {
         if (s === 'Pass') {
           setStatus('Playing');
