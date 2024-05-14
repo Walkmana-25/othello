@@ -373,8 +373,8 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
     [0, 0, 0, 2, 1, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -384,17 +384,46 @@ const Home = () => {
 
   const [status, setStatus] = useState<string>('Playing');
 
-  const boardWithNextDirection = (board: number[][], player: number): number[][] => {
-    const board_copy = structuredClone(board);
+  const boardWithNextDirection = (
+    board: number[][],
+    player: number,
+    gameStatus: string,
+  ): number[][] => {
+    let board_copy = structuredClone(board);
+    let userCanPut = false;
 
     for (let line: number = 0; line < 8; line++) {
       for (let cell: number = 0; cell < 8; cell++) {
         const resultCanPut = canPut(line, cell, player, structuredClone(board));
         if (resultCanPut[0] === true && board_copy[cell][line] === 0) {
           board_copy[cell][line] = 3;
+          userCanPut = true;
         }
       }
     }
+
+    if (userCanPut === false && gameStatus === 'Playing') {
+      {
+        setStatus('Pass');
+        setPlayer(player === 1 ? 2 : 1);
+        board_copy = boardWithNextDirection(board_copy, player === 1 ? 2 : 1, 'pass');
+      }
+    } else if (userCanPut === false && gameStatus === 'pass') {
+      setStatus('Game Set');
+
+      //delete Next Direction
+      board_copy = board_copy.map((line) => {
+        line.map((disc) => {
+          if (disc === 3) {
+            return 0;
+          } else {
+            return disc;
+          }
+        });
+        return line;
+      });
+    }
+
     return board_copy;
   };
 
@@ -407,6 +436,9 @@ const Home = () => {
     if (current === 0) {
       const can = canPut(x, y, p, structuredClone(board_copy));
       if (can[0] && (s === 'Playing' || s === 'Pass')) {
+        if (s === 'Pass') {
+          setStatus('Playing');
+        }
         //copy board
         board_copy[y][x] = p;
 
@@ -482,7 +514,7 @@ const Home = () => {
       </div>
       <div className="flex justify-center items-center m-5 aspect-square">
         <div className="bg-green-800 grid grid-cols-8 aspect-square w-full">
-          {boardWithNextDirection(board, player).map((row, i) =>
+          {boardWithNextDirection(board, player, status).map((row, i) =>
             row.map((cell, k) => (
               <div
                 key={`${i}-${k}`}
