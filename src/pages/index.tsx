@@ -464,55 +464,52 @@ const Home = () => {
   };
 
   return (
-    <>
-      <title>Othello</title>
-      <div className="bg-slate-200 md:flex h-screen justify-center">
-        <div className="md:flex md:flex-col justify-center m-8">
-          <h1 className="m-4 text-6xl text-green-700 text-center font-semibold">Othello Game</h1>
-          <div className="justify-between py-8 px-8 w-full max-w-sm mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
-            <h2>Player: {player === 1 ? 'White' : 'Black'}</h2>
-            <h3>
-              Score
-              <br />
-              White: {count_disc()[0]} Black: {count_disc()[1]}
-              <br />
-              {winner()}
-            </h3>
-            <p>Status: {status}</p>
-          </div>
-          <button
-            onClick={() => {
-              window.location.reload();
-            }}
-            className="justify-center m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Reload
-          </button>
+    <div className="bg-slate-200 md:flex h-screen justify-center">
+      <div className="md:flex md:flex-col justify-center m-8">
+        <h1 className="m-4 text-6xl text-green-700 text-center font-semibold">Othello Game</h1>
+        <div className="justify-between py-8 px-8 w-full max-w-sm mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
+          <h2>Player: {player === 1 ? 'White' : 'Black'}</h2>
+          <h3>
+            Score
+            <br />
+            White: {count_disc()[0]} Black: {count_disc()[1]}
+            <br />
+            {winner()}
+          </h3>
+          <p>Status: {status}</p>
         </div>
-        <div className="flex justify-center items-center m-5 aspect-square">
-          <div className="bg-green-800 grid grid-cols-8 aspect-square w-full">
-            {board.map((row, i) =>
-              row.map((cell, k) => (
-                <div
-                  key={`${i}-${k}`}
-                  //className={styles.cell}
-                  className="border border-black aspect-square"
-                  onClick={() => clickCell(k, i, player, status, structuredClone(board))}
-                >
-                  {cell !== 0 && (
-                    //<div className={styles.disc} style={{ backgroundColor: discColor(cell) }} />
-                    <div
-                      className="rounded-full flex justify-center items-center m-2 h-3/4 w-3/4 aspect-square"
-                      style={{ backgroundColor: discColor(cell) }}
-                    />
-                  )}
-                </div>
-              )),
-            )}
-          </div>
+        <button
+          onClick={() => {
+            window.location.reload();
+          }}
+          className="justify-center m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Reload
+        </button>
+      </div>
+      <div className="flex justify-center items-center m-5 aspect-square">
+        <div className="bg-green-800 grid grid-cols-8 aspect-square w-full">
+          {board.map((row, i) =>
+            row.map((cell, k) => (
+              <div
+                key={`${i}-${k}`}
+                //className={styles.cell}
+                className="border border-black aspect-square"
+                onClick={() => clickCell(k, i, player, status, structuredClone(board))}
+              >
+                {cell !== 0 && (
+                  //<div className={styles.disc} style={{ backgroundColor: discColor(cell) }} />
+                  <div
+                    className="rounded-full flex justify-center items-center m-2 h-3/4 w-3/4 aspect-square"
+                    style={{ backgroundColor: discColor(cell) }}
+                  />
+                )}
+              </div>
+            )),
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
