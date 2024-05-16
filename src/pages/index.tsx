@@ -38,34 +38,33 @@ function canPutWithPlace(
     [1, 0],
     [1, 1],
   ];
-  const boardCopy = structuredClone(board);
   const changeBoard: number[][] = [];
+  const boardCopy: number[][] = structuredClone(board);
   for (const direction of directions) {
-    const changeBoardTemp: number[][] = [];
+    const changeBoardTemp: number[][] = [[x, y]];
     const dx = direction[0];
     const dy = direction[1];
-
-    console.log(dx, dy);
+    const reverseColour: number[] = [0, 2, 1];
 
     let differentColorIsNext = false;
     for (let i: number = 1; i < 8; i++) {
       const cx: number = x + dx * i;
       const cy: number = y + dy * i;
       if (cx < 0 || cy < 0 || cx >= 8 || cy >= 8) continue;
-      const current: number = boardCopy[cx][cy];
+      const current: number = boardCopy[cy][cx];
 
       if (current === 0) {
         break;
-      } else if (i === 1 && current === c) {
-        changeBoardTemp.push([cx, cy]);
-        continue;
-      } else if (current === (c === 1 ? 2 : 1)) {
+      } else if (current === reverseColour[c]) {
         changeBoardTemp.push([cx, cy]);
         differentColorIsNext = true;
       } else if (differentColorIsNext && current === c) {
         changeBoardTemp.push([cx, cy]);
         changeBoard.push(...changeBoardTemp);
         ans = true;
+        console.log('true', dx, dy, x, y);
+        break;
+      } else if (current === c) {
         break;
       }
     }
@@ -152,7 +151,7 @@ const Home = () => {
         board_copy[y][x] = p;
 
         can[1].map((place) => {
-          board_copy[place[0]][place[1]] = p;
+          board_copy[place[1]][place[0]] = p;
         });
 
         //change turn
