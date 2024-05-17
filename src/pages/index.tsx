@@ -95,34 +95,22 @@ const Home = () => {
 
     for (let line: number = 0; line < 8; line++) {
       for (let cell: number = 0; cell < 8; cell++) {
-        const resultCanPut = canPutWithPlace(line, cell, player, structuredClone(board));
+        const resultCanPut = canPutWithPlace(line, cell, player, board);
         if (resultCanPut.length >= 1 && board_copy[cell][line] === 0) {
           board_copy[cell][line] = 3;
           userCanPut = true;
         }
       }
     }
-
-    if (userCanPut === false && gameStatus === 'Playing') {
-      {
+    if (!userCanPut) {
+      if (gameStatus === 'Playing') {
+        const nextPlayer = 3 - player;
         setStatus('Pass');
-        setPlayer(player === 1 ? 2 : 1);
-        board_copy = boardWithNextDirection(board_copy, player === 1 ? 2 : 1, 'pass');
+        setPlayer(nextPlayer);
+        board_copy = boardWithNextDirection(board_copy, nextPlayer, 'pass');
+      } else if (gameStatus === 'pass') {
+        setStatus('Game Set');
       }
-    } else if (userCanPut === false && gameStatus === 'pass') {
-      setStatus('Game Set');
-
-      //delete Next Direction
-      board_copy = board_copy.map((line) => {
-        line.map((disc) => {
-          if (disc === 3) {
-            return 0;
-          } else {
-            return disc;
-          }
-        });
-        return line;
-      });
     }
 
     return board_copy;
@@ -143,36 +131,20 @@ const Home = () => {
         //copy board
         board_copy[y][x] = p;
 
-        can.map((place) => {
+        can.forEach((place) => {
           board_copy[place[1]][place[0]] = p;
         });
 
         //change turn
-        if (current === 0) {
-          if (p === 1) {
-            setPlayer(2);
-          } else {
-            setPlayer(1);
-          }
-        }
+        setPlayer(3 - p);
       }
     }
     setBoard(board_copy);
   };
 
   const countDisc = (): [number, number] => {
-    let white = 0;
-    let black = 0;
-
-    board.map((line) => {
-      line.map((disc) => {
-        if (disc === 1) {
-          white++;
-        } else if (disc === 2) {
-          black++;
-        }
-      });
-    });
+    const black: number = board.flat().filter((disc) => disc === 2).length;
+    const white: number = board.flat().filter((disc) => disc === 1).length;
 
     return [white, black];
   };
@@ -222,7 +194,7 @@ const Home = () => {
               <div
                 key={`${i}-${k}`}
                 className="flex justify-center items-center border border-black aspect-square"
-                onClick={() => clickCell(k, i, player, status, structuredClone(board))}
+                onClick={() => clickCell(k, i, player, status, board)}
               >
                 {cell !== 0 && (
                   <div
