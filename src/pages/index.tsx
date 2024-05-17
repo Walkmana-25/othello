@@ -21,13 +21,7 @@ const discColor = (num: number): string => {
   }
 };
 
-function canPutWithPlace(
-  x: number,
-  y: number,
-  c: number,
-  board: number[][],
-): [boolean, number[][]] {
-  let ans = false;
+const canPutWithPlace = (x: number, y: number, c: number, board: number[][]): number[][] => {
   const directions: number[][] = [
     [-1, -1],
     [-1, 0],
@@ -44,7 +38,7 @@ function canPutWithPlace(
     const changeBoardTemp: number[][] = [[x, y]];
     const dx = direction[0];
     const dy = direction[1];
-    const reverseColour: number[] = [0, 2, 1];
+    const reverseColor: number[] = [0, 2, 1];
 
     let differentColorIsNext = false;
     for (let i: number = 1; i < 8; i++) {
@@ -55,13 +49,12 @@ function canPutWithPlace(
 
       if (current === 0) {
         break;
-      } else if (current === reverseColour[c]) {
+      } else if (current === reverseColor[c]) {
         changeBoardTemp.push([cx, cy]);
         differentColorIsNext = true;
       } else if (differentColorIsNext && current === c) {
         changeBoardTemp.push([cx, cy]);
         changeBoard.push(...changeBoardTemp);
-        ans = true;
         console.log('true', dx, dy, x, y);
         break;
       } else if (current === c) {
@@ -70,8 +63,8 @@ function canPutWithPlace(
     }
   }
 
-  return [ans, changeBoard];
-}
+  return changeBoard;
+};
 
 const Home = () => {
   //othello board
@@ -103,7 +96,7 @@ const Home = () => {
     for (let line: number = 0; line < 8; line++) {
       for (let cell: number = 0; cell < 8; cell++) {
         const resultCanPut = canPutWithPlace(line, cell, player, structuredClone(board));
-        if (resultCanPut[0] === true && board_copy[cell][line] === 0) {
+        if (resultCanPut.length >= 1 && board_copy[cell][line] === 0) {
           board_copy[cell][line] = 3;
           userCanPut = true;
         }
@@ -139,18 +132,18 @@ const Home = () => {
     console.log('click');
     const board_copy = structuredClone(board);
 
-    const current = structuredClone(board_copy[y][x]);
+    const current = board_copy[y][x];
 
     if (current === 0) {
-      const can = canPutWithPlace(x, y, p, structuredClone(board_copy));
-      if (can[0] && (s === 'Playing' || s === 'Pass')) {
+      const can = canPutWithPlace(x, y, p, board_copy);
+      if (can.length !== 0 && (s === 'Playing' || s === 'Pass')) {
         if (s === 'Pass') {
           setStatus('Playing');
         }
         //copy board
         board_copy[y][x] = p;
 
-        can[1].map((place) => {
+        can.map((place) => {
           board_copy[place[1]][place[0]] = p;
         });
 
