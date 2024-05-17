@@ -193,7 +193,7 @@ const Home = () => {
 
   return (
     <div className="bg-slate-200 md:flex h-screen justify-center">
-      <div className="md:flex md:flex-col justify-center m-8">
+      <div className="flex md:flex-col items-center justify-center m-8">
         <h1 className="m-4 text-6xl text-green-700 text-center font-semibold">Othello Game</h1>
         <div className="justify-between py-8 px-8 w-full max-w-sm mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
           <h2>Player: {player === 1 ? 'White' : 'Black'}</h2>
@@ -221,7 +221,7 @@ const Home = () => {
             row.map((cell, k) => (
               <div
                 key={`${i}-${k}`}
-                className="border border-black aspect-square"
+                className="flex justify-center items-center border border-black aspect-square"
                 onClick={() => clickCell(k, i, player, status, structuredClone(board))}
               >
                 {cell !== 0 && (
